@@ -1,8 +1,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { BicyclesIndex } from "./BicyclesIndex";
+import { BicyclesNew } from "./BicyclesNew";
 
+export function Content () {
    const [bicycles, setBicycles] = useState([]);
+   const handleCreateBicycle = (params, successCallback) => {
+        console.log("handleCreateBicycle", params);
+        axios.post("http://localhost:3000/bicycles.json", params).then((response) => {
+          setBicycles([...bicycles, response.data]);
+         successCallback();
+       });
+      };
 
    const handleIndexBicycles = () => {
      console.log("handleIndexBicycles");
@@ -13,10 +22,9 @@ import { BicyclesIndex } from "./BicyclesIndex";
   };
    useEffect(handleIndexBicycles, []);
 
-export function Content () {
-
   return (
     <div>
+      <BicyclesNew onCreateBicycle={handleCreateBicycle}/>
       <BicyclesIndex bicycles={bicycles}/>
     </div>
     );
